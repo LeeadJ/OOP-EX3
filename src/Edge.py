@@ -4,4 +4,6 @@ class Edge:
         self.Weight = Weight
         self.Dest = Dest
 
+    def __repr__(self):
+        return 'Src: %s, Dest: %d, Weight: %s' % (self.Src, self.Dest, self.Weight)
 

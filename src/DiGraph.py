@@ -19,6 +19,9 @@ class DiGraph(GraphInterface):
             counter += len(self.edge_map[key].values())
         return counter
 
+    def get_all_v(self) -> dict:
+        return self.node_map
+
     def all_in_edges_of_node(self, id1: int) -> dict:
         in_edges = {}
         for key in self.edge_map:
@@ -82,3 +85,8 @@ class DiGraph(GraphInterface):
             self.edge_map.get(node_id1).pop(node_id2)
             self.mc += 1
             return True
+
+    def __repr__(self):
+        return 'Node map: %s, Edge map: %s' % (self.node_map.items(), self.edge_map.items())
+
+
