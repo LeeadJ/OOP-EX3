@@ -17,6 +17,18 @@ class TestDiGraph(TestCase):
         graph_test.add_edge(2, 4, 1)
         self.assertEqual(graph_test.v_size(), 4)
 
+    def test_get_all_v(self):
+        graph_test = DiGraph()
+        graph_test.add_node(1, (0, 0, 0))
+        graph_test.add_node(2, (0, 0, 0))
+        graph_test.add_node(3, (0, 0, 0))
+        graph_test.add_node(4, (0, 0, 0))
+        graph_test.add_edge(1, 2, 1)
+        graph_test.add_edge(1, 3, 1)
+        graph_test.add_edge(1, 4, 1)
+        graph_test.add_edge(2, 4, 1)
+        print(graph_test.get_all_v().get(1).location)
+
     def test_e_size(self):
         graph_test = DiGraph()
         graph_test.add_node(1, (0, 0, 0))
