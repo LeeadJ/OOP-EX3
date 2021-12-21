@@ -1,7 +1,8 @@
-import heapq
+import heapq as hq
 import json
 import math
 from typing import List
+import sys
 
 from src.GraphAlgoInterface import GraphAlgoInterface
 from src.GraphInterface import GraphInterface
@@ -67,7 +68,7 @@ class GraphAlgo(GraphAlgoInterface):
         if id1 == id2:
             return 0, []
 
-        return self.dijkstra(id1, id2)
+        return self.dijkstraAlgo(id1, id2)
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         pass
@@ -78,47 +79,49 @@ class GraphAlgo(GraphAlgoInterface):
     def plot_graph(self) -> None:
         pass
 
-    def dijkstra(self, src: int, dest: int) -> (float, list):
-        # Set the distance to zero for our initial node
-        # and to infinity for other nodes.
-        distances = {node: math.inf for node in self.graph.get_all_v()}
-        distances[src] = 0
-        # Set a dictionary with the previous node of each node in the path
-        # and set the previous node of the source node to inf key (which not one of the nodes in the graph)
-        previous_nodes = {src: math.inf}
-        # Set a heap queue and insert the source node
+    """This is the Dijkstra's Algorithm implementation."""
+    def dijkstraAlgo(self, src: int, dest: int) -> (float, list):
+        # initializing the dist.
+        # dist[src] is going to be zero and the rest inf.
+        inf = sys.maxsize
+        dist = {node: inf for node in self.graph.get_all_v()}
+        dist[src] = 0
+        # initializing a dictionary with the previous node of each node in the path and set the previous node of the source node to inf
+        prev_nodes = {src: inf}
+        # initializing a heap queue and insert the source node
         q = []
-        heapq.heappush(q, (0, src))
+        hq.heappush(q, (0, src))  # hq = heap queue
 
         while q:
-            # Select the unvisited node with the smallest distance,
-            # it's current node now.
-            curr_node = heapq.heappop(q)[1]
-            # Stop, if the smallest distance among the unvisited nodes is infinity.
-            if distances[curr_node] == math.inf:
+            # Step 1: find the unvisited node with the smallest distance, first iteration starts at current node.
+            curr_node = hq.heappop(q)[1]
+
+            # Condition 1: If the smallest distance among the unvisited nodes is infinity, then break.
+            if dist[curr_node] == inf:
                 break
-            # Find unvisited neighbors for the current node
-            # and calculate their distances through the current node.
+
+            # loop through the unvisited nodes and calculate their distance from the src node.
             edges = self.graph.all_out_edges_of_node(curr_node)
-            for neighbour in edges.keys():
-                alternative_route = distances[curr_node] + edges.get(neighbour)
-                # Compare the newly calculated distance to the assigned and save the smaller one.
-                if alternative_route < distances[neighbour]:
-                    distances[neighbour] = alternative_route
-                    previous_nodes[neighbour] = curr_node
-                    # Mark the current node as visited and push it the visited heap queue.
-                    heapq.heappush(q, (distances[neighbour], neighbour))
-                # If we have reached the destination node we done.
+            for neighbor in edges.keys():
+                new_path = dist[curr_node] + edges.get(neighbor)
+                # if the new_path is smaller than the current one, update..
+                if new_path < dist[neighbor]:
+                    dist[neighbor] = new_path
+                    prev_nodes[neighbor] = curr_node
+                    # Mark the current node as visited, insert it in the hq.
+                    hq.heappush(q, (dist[neighbor], neighbor))
+                # Condition 2: If the dest node is reached, break.
                 if curr_node == dest:
                     break
-        # There is no path
-        if distances[dest] == math.inf:
+        # Condition 3: If there is no path from src to dest:
+        if dist[dest] == inf:
             return float('inf'), []
-
-        path, curr_node = [], dest
+        # Creating the path list
+        path = []
+        curr_node = dest
         while curr_node != src:
-            path.insert(0, curr_node)  # append to left
-            curr_node = previous_nodes[curr_node]
+            path.insert(0, curr_node)
+            curr_node = prev_nodes[curr_node]
         if path:
             path.insert(0, curr_node)
-        return distances[dest], path
+        return dist[dest] / 1.0, path
