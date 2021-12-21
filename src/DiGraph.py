@@ -24,18 +24,25 @@ class DiGraph(GraphInterface):
 
     def all_in_edges_of_node(self, id1: int) -> dict:
         in_edges = {}
-        for key in self.edge_map:
-            for i in self.edge_map[key].values():
-                if i.Dest == id1:
-                    in_edges[i.Src] = i.Weight
-        return in_edges
+        try:
+            for key in self.edge_map:
+                for i in self.edge_map[key].values():
+                    if i.Dest == id1:
+                        in_edges[i.Src] = i.Weight
+        except Exception as e:
+            pass
+        finally:
+            return in_edges
 
     def all_out_edges_of_node(self, id1: int) -> dict:
         out_edges = {}
-        for i in self.edge_map[id1].values():
-            out_edges[i.Dest] = i.Weight
-        return out_edges
-        # return self.edge_map.get(id1)
+        try:
+            for i in self.edge_map[id1].values():
+                out_edges[i.Dest] = i.Weight
+        except Exception as e:
+            pass
+        finally:
+            return out_edges
 
     def get_mc(self) -> int:
         return self.mc
@@ -59,7 +66,8 @@ class DiGraph(GraphInterface):
             return True
         # if this edge is already in the dict then do nothing
         else:
-            pass
+            print("could not connect edge")
+            return False
 
     def add_node(self, node_id: int, pos: tuple = None) -> bool:
         temp_node = Gnode(node_id, pos)
@@ -68,11 +76,13 @@ class DiGraph(GraphInterface):
             self.mc += 1
             return True
         else:
-            pass
+            print("Could not add node {}".format(node_id))
+            return False
 
     def remove_node(self, node_id: int) -> bool:
         if self.node_map.get(node_id) is None:
-            pass
+            print("Node {} doesn't exist ".format(node_id))
+            return False
         else:
             self.node_map.pop(node_id)
             self.mc += 1
@@ -80,13 +90,14 @@ class DiGraph(GraphInterface):
 
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
         if self.edge_map.get(node_id1).get(node_id2) is None:
-            pass
+            print("Edge doesn't exist")
+            return False
         else:
             self.edge_map.get(node_id1).pop(node_id2)
             self.mc += 1
             return True
 
     def __repr__(self):
-        return 'Node map: %s, Edge map: %s' % (self.node_map.items(), self.edge_map.items())
+        return 'Node map: %s \nEdge map: %s' % (self.node_map, self.edge_map)
 
 
