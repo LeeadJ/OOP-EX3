@@ -10,7 +10,8 @@ class TestGraphAlgo(TestCase):
         algo = GraphAlgo(graph_test)
         algo.load_from_json(r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\T0.json")
         print(algo.get_graph())
-        algo.save_to_json("test_output.json")
+        # print(algo.get_graph().get_all_v().get(0).location)
+        # algo.save_to_json("test_output.json")
 
     def test_shortest_path(self):
         n0 = Gnode(0, None)
@@ -33,3 +34,25 @@ class TestGraphAlgo(TestCase):
         algo = GraphAlgo(g)
         print(algo.get_graph())
         print(algo.shortest_path(0, 3))
+
+    def test_center_point(self):
+        graph_test = DiGraph()
+        algo = GraphAlgo(graph_test)
+        algo.load_from_json(r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\A0.json")
+        print(algo.centerPoint())
+        algo.load_from_json(r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\A1.json")
+        print(algo.centerPoint())
+        algo.load_from_json(r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\A2.json")
+        print(algo.centerPoint())
+        algo.load_from_json(r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\A3.json")
+        print(algo.centerPoint())
+        algo.load_from_json(r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\A4.json")
+        print(algo.centerPoint())
+        algo.load_from_json(r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\A5.json")
+        print(algo.centerPoint())
+
+    def test_plot_graph(self):
+        graph_test = DiGraph()
+        algo = GraphAlgo(graph_test)
+        algo.load_from_json("C:/Users/arieh/PycharmProjects/OOP-EX3/src/data/A5.json")
+        algo.plot_graph()
