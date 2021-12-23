@@ -1,9 +1,10 @@
 import heapq as hq
 import json
 import math
+from random import uniform
 from typing import List
 import sys
-
+from matplotlib import pyplot as plt
 from src.GraphAlgoInterface import GraphAlgoInterface
 from src.GraphInterface import GraphInterface
 from src.DiGraph import *
@@ -39,7 +40,7 @@ class GraphAlgo(GraphAlgoInterface):
 
     def save_to_json(self, file_name: str) -> bool:
         try:
-            with open('../data/' + file_name, "w") as write_file:
+            with open(file_name, "w") as write_file:
                 json_graph = {"Edges": [], "Nodes": []}
                 # save edges as json
                 for id1 in self.get_graph().get_all_v().keys():
@@ -71,13 +72,65 @@ class GraphAlgo(GraphAlgoInterface):
         return self.dijkstraAlgo(id1, id2)
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
-        pass
+        temp = []  # temp node list
+        if len(node_lst) == 0:  # check if the node's list is empty
+            return None
+        currNode = node_lst[0]
+        temp.append(currNode)
+        visitedNodes = []
+        while len(node_lst) != 0:  # while there are still unvisited cities
+            visitedNodes.append(currNode)  # add the current node to visitedNode list
+            min_distance = sys.maxsize
+            node_lst.remove(currNode)
+            path = []  # init ans list of nodes
+            for node in node_lst:  # go all over the unvisited nodes, calculate the closest one
+                if node not in visitedNodes:
+                    curr_distance = self.shortest_path(currNode, node)[0]
+                    if curr_distance < min_distance:
+                        min_distance = curr_distance
+                        path = self.shortest_path(currNode, node)[1]  # add the closest node to path list
+            for node in path:  # The closest node's path (out of all cities) is appended to the list which is to be returned
+                if node is not path[0]:
+                    temp.append(node)
+                    visitedNodes.append(node)
+                    node_lst.remove(node)
+        if len(temp) == 0:
+            return None
+        distance = 0
+        for i in range(len(temp)-1):
+            distance += self.shortest_path(temp[i].key, temp[i+1].key)
+        return temp, distance
 
     def centerPoint(self) -> (int, float):
-        pass
+        min_distance = math.inf
+        node_id = 0
+        curr_max = 0
+        for Node1 in self.get_graph().get_all_v().values():
+            for Node2 in self.get_graph().get_all_v().values():
+                distance = self.shortest_path(Node1.key, Node2.key)[0]
+                if distance > curr_max:
+                    curr_max = distance
+            if curr_max < min_distance:
+                min_distance = curr_max
+                node_id = Node1.key
+            curr_max = 0
+        ans = (node_id, min_distance)
+        return ans
 
     def plot_graph(self) -> None:
-        pass
+        for node in self.get_graph().get_all_v().values():
+            x, y, z = node.location
+            plt.plot(x, y, markersize=30, marker='.', color='red')
+            plt.text(x, y, str(node.key), color='black', fontsize=10)
+            for dest_id, w in self.graph.all_out_edges_of_node(node.key).items():
+                dest = self.graph.node_map.get(dest_id)
+                x2, y2, z2 = dest.location
+                plt.annotate("", xy=(x, y), xytext=(x2, y2), arrowprops=dict(arrowstyle="<-"))
+                # mid_x = (x+x2)/2
+                # mid_y = (y+y2)/2
+                # plt.text(mid_x, mid_y, str(w)[0:4], color='black', fontsize=10)
+        plt.show()
+
 
     """This is the Dijkstra's Algorithm implementation."""
     def dijkstraAlgo(self, src: int, dest: int) -> (float, list):
