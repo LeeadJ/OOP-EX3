@@ -4,6 +4,7 @@ from src.Gnode import Gnode
 from src.GraphAlgo import GraphAlgo
 import time
 
+
 class TestGraphAlgo(TestCase):
 
     def test_get_graph(self):
@@ -70,7 +71,7 @@ class TestGraphAlgo(TestCase):
         llist = [3, 0, 1, 2]
         ans = (7.0, llist)
         self.assertEqual(ans, algo.shortest_path(3, 2))
-        print(algo.shortest_path(3,2))
+        print(algo.shortest_path(3, 2))
 
     def test_center_point(self):
         graph_test = DiGraph()
@@ -139,7 +140,7 @@ class TestGraphAlgo(TestCase):
         print(algo.dijkstraAlgo(0, 2))
         best = set()
         best.clear()
-        best.update(algo.dijkstraAlgo(0,2)[1])
+        best.update(algo.dijkstraAlgo(0, 2)[1])
         best.update(algo.dijkstraAlgo(0, 3)[1])
         print(best)
 
@@ -155,20 +156,12 @@ class TestGraphAlgo(TestCase):
             start_time = time.time()
             algo.centerPoint()
             finish_time = time.time()
-            center = finish_time-start_time
+            center = finish_time - start_time
 
             start_time = time.time()
 
             finish_time = time.time()
             center = finish_time - start_time
         algo.load_from_json("C:/Users/arieh/PycharmProjects/OOP-EX3/src/data/A5.json")
-
-    def test_stam_test(self):
-        graph_test = DiGraph()
-        algo = GraphAlgo(graph_test)
-        algo.load_from_json("C:/Users/arieh/PycharmProjects/OOP-EX3/src/data/A0.json")
-        for node in algo.graph.node_map.values():
-            node.edges_in = 2
-            print(node)
 
 
