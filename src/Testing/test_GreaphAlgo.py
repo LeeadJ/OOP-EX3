@@ -162,3 +162,13 @@ class TestGraphAlgo(TestCase):
             finish_time = time.time()
             center = finish_time - start_time
         algo.load_from_json("C:/Users/arieh/PycharmProjects/OOP-EX3/src/data/A5.json")
+
+    def test_stam_test(self):
+        graph_test = DiGraph()
+        algo = GraphAlgo(graph_test)
+        algo.load_from_json("C:/Users/arieh/PycharmProjects/OOP-EX3/src/data/A0.json")
+        for node in algo.graph.node_map.values():
+            node.edges_in = 2
+            print(node)
+
+
