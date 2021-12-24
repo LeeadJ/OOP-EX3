@@ -98,6 +98,6 @@ class DiGraph(GraphInterface):
             return True
 
     def __repr__(self):
-        return 'Node map: %s \nEdge map: %s' % (self.node_map, self.edge_map)
+        return '|V|=%s , |E|=%s' % (self.v_size(), self.e_size())
 
 
