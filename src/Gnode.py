@@ -2,7 +2,9 @@ import random
 
 
 class Gnode:
-    def __init__(self, key, location: tuple = None):
+    def __init__(self, key, location: tuple = None,):
+        self.edges_in = 0
+        self.edges_out = 0
         self.key = key
         if location is None:
             x = random.uniform(35, 36)
@@ -14,4 +16,4 @@ class Gnode:
         self.tag = 0
 
     def __repr__(self):
-        return 'Key: %s, location: %s' % (self.key, self.location)
+        return '%s: |edges out| %s |edges in| %s' % (self.key, self.edges_out, self.edges_in)
