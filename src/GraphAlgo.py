@@ -1,6 +1,7 @@
 import heapq as hq
 import json
 import math
+from queue import Queue
 from random import uniform
 from typing import List
 import sys
@@ -8,6 +9,7 @@ from matplotlib import pyplot as plt
 from src.GraphAlgoInterface import GraphAlgoInterface
 from src.GraphInterface import GraphInterface
 from src.DiGraph import *
+from itertools import permutations
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -72,34 +74,49 @@ class GraphAlgo(GraphAlgoInterface):
         return self.dijkstraAlgo(id1, id2)
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
-        temp = []  # temp node list
-        if len(node_lst) == 0:  # check if the node's list is empty
-            return None
-        currNode = node_lst[0]
-        temp.append(currNode)
-        visitedNodes = []
-        while len(node_lst) != 0:  # while there are still unvisited cities
-            visitedNodes.append(currNode)  # add the current node to visitedNode list
-            min_distance = sys.maxsize
-            node_lst.remove(currNode)
-            path = []  # init ans list of nodes
-            for node in node_lst:  # go all over the unvisited nodes, calculate the closest one
-                if node not in visitedNodes:
-                    curr_distance = self.shortest_path(currNode, node)[0]
-                    if curr_distance < min_distance:
-                        min_distance = curr_distance
-                        path = self.shortest_path(currNode, node)[1]  # add the closest node to path list
-            for node in path:  # The closest node's path (out of all cities) is appended to the list which is to be returned
-                if node is not path[0]:
-                    temp.append(node)
-                    visitedNodes.append(node)
-                    node_lst.remove(node)
-        if len(temp) == 0:
-            return None
-        distance = 0
-        for i in range(len(temp)-1):
-            distance += self.shortest_path(temp[i].key, temp[i+1].key)
-        return temp, distance
+        best_weight = sys.maxsize
+        for starting_n in node_lst:
+            if self.tsp_helper(starting_n, node_lst)[1] < best_weight:
+                best_weight = self.tsp_helper(starting_n, node_lst)[1]
+                ans = self.tsp_helper(starting_n, node_lst)
+        if best_weight == sys.maxsize:
+            return [[], -1]
+        return ans
+
+    def tsp_helper(self, starting_n, node_list):
+        best_path = []
+        path = []
+        temp_list = []
+        for i in node_list:
+            if i != starting_n:
+                temp_list.append(i)
+
+        min_weight = sys.maxsize
+        # create permutations of all the nodes
+        permu = permutations(temp_list)
+
+        for curr_permu in permu:
+            path.clear()
+            relevant = True
+            curr_weight = 0
+            k = starting_n
+            path.append(k)
+            # loop through the permutation
+            for j in curr_permu:
+                weight = self.dijkstraAlgo(k, j)[0]
+                for n in range(len(self.dijkstraAlgo(k, j)[1])):
+                    if n != 0:
+                        path.append(self.dijkstraAlgo(k, j)[1][n])
+                if weight == float('inf'):  # weight does not exist
+                    relevant = False
+                    break
+                curr_weight += weight
+                k = j
+            if relevant:  # relevant remains true, so all edges exist
+                if min_weight > curr_weight:
+                    min_weight = curr_weight
+                    best_path = path
+        return best_path, min_weight
 
     def centerPoint(self) -> (int, float):
         min_distance = math.inf
@@ -131,8 +148,8 @@ class GraphAlgo(GraphAlgoInterface):
                 # plt.text(mid_x, mid_y, str(w)[0:4], color='black', fontsize=10)
         plt.show()
 
-
     """This is the Dijkstra's Algorithm implementation."""
+
     def dijkstraAlgo(self, src: int, dest: int) -> (float, list):
         # initializing the dist.
         # dist[src] is going to be zero and the rest inf.
@@ -178,3 +195,28 @@ class GraphAlgo(GraphAlgoInterface):
         if path:
             path.insert(0, curr_node)
         return dist[dest] / 1.0, path
+
+
+if __name__ == "__main__":
+    a = Gnode(0, None)
+    b = Gnode(1, None)
+    c = Gnode(2, None)
+    d = Gnode(3, None)
+    e = Gnode(4, None)
+    graph = DiGraph()
+    algo = GraphAlgo(graph)
+    algo.get_graph().add_node(a.key, a.location)
+    algo.get_graph().add_node(b.key, b.location)
+    algo.get_graph().add_node(c.key, c.location)
+    algo.get_graph().add_node(d.key, d.location)
+    algo.get_graph().add_edge(0, 1, 8.0)
+    algo.get_graph().add_edge(0, 2, 1.0)
+    algo.get_graph().add_edge(0, 3, 3.0)
+    algo.get_graph().add_edge(2, 3, 1.0)
+    algo.get_graph().add_edge(3, 0, 1.0)
+    algo.get_graph().add_edge(3, 1, 1.0)
+    algo.get_graph().add_edge(3, 2, 4.0)
+    ll = [0, 3]
+    print(algo.TSP(ll))
+    # print(algo.shortest_path(0, 2))
+    index = 0

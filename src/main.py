@@ -21,7 +21,8 @@ def check():
     """
     # check0()
     # check1()
-    check2()
+    # check2()
+    check3()
 
 
 def check0():
@@ -102,7 +103,7 @@ def check3():
     g_algo = GraphAlgo(g)
     print(g_algo.centerPoint())
     print(g_algo.TSP([1, 2, 4]))
-    g_algo.plot_graph()
+    # g_algo.plot_graph()
 
 
 if __name__ == '__main__':

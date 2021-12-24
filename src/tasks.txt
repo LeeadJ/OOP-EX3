@@ -1,6 +1,6 @@
 Tasks to get the assignment done:
-1. Change repr of graph (Leead)
-2. Change return of get_all_v (Leead)
+1. Change repr of graph (Leead) -V
+2. Change return of get_all_v (Leead) *(need to verify)
 3. Is connected (Arieh)
 4. TSP (Arieh)
 5. Tests for graphAlgo (Leead)
