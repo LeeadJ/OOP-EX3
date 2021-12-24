@@ -4,6 +4,7 @@ from src.Gnode import Gnode
 from src.GraphAlgo import GraphAlgo
 import time
 
+
 class TestGraphAlgo(TestCase):
 
     def test_get_graph(self):
@@ -70,7 +71,7 @@ class TestGraphAlgo(TestCase):
         llist = [3, 0, 1, 2]
         ans = (7.0, llist)
         self.assertEqual(ans, algo.shortest_path(3, 2))
-        print(algo.shortest_path(3,2))
+        print(algo.shortest_path(3, 2))
 
     def test_center_point(self):
         graph_test = DiGraph()
@@ -139,26 +140,45 @@ class TestGraphAlgo(TestCase):
         print(algo.dijkstraAlgo(0, 2))
         best = set()
         best.clear()
-        best.update(algo.dijkstraAlgo(0,2)[1])
+        best.update(algo.dijkstraAlgo(0, 2)[1])
         best.update(algo.dijkstraAlgo(0, 3)[1])
         print(best)
 
-    def runtime_checker(self):
+    def test_runtimer(self):
         g1 = r"C:\Users\Leead\PycharmProjects\OOP-EX3\src\data\G1.json"
         g2 = r"C:\Users\Leead\PycharmProjects\OOP-EX3\src\data\G2.json"
         g3 = r"C:\Users\Leead\PycharmProjects\OOP-EX3\src\data\G3.json"
         graphs = (g1, g2, g3)
+        count = 1
         for g in graphs:
-            graph = DiGraph(g)
+            print("\t\t Graph : G%s"% count)
+            count+=1
+            graph = DiGraph()
             algo = GraphAlgo(graph)
+            algo.load_from_json(g)
 
             start_time = time.time()
             algo.centerPoint()
             finish_time = time.time()
-            center = finish_time-start_time
+            center_time = finish_time - start_time
+            print("Center: ",algo.centerPoint())
+            print("\nCenter Time: ", center_time)
 
             start_time = time.time()
-
+            algo.shortest_path(1, 2)
             finish_time = time.time()
-            center = finish_time - start_time
-        algo.load_from_json("C:/Users/arieh/PycharmProjects/OOP-EX3/src/data/A5.json")
+            sp_time = finish_time - start_time
+            print("\nShortest Path Time: ", sp_time)
+
+            ll = [1, 2]
+            start_time = time.time()
+            algo.TSP(ll)
+            finish_time = time.time()
+            tsp_time = finish_time - start_time
+            print("\nTSP Time: ", tsp_time)
+
+            start_time = time.time()
+            algo.isConnected()
+            finish_time = time.time()
+            isConnected_time = finish_time - start_time
+            print("\nisConnected Time: ", isConnected_time)
