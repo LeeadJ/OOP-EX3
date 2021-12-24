@@ -1,7 +1,7 @@
 from src.GraphInterface import GraphInterface
 from src.Edge import *
 from src.Gnode import *
-from itertools import permutations
+
 
 class DiGraph(GraphInterface):
 
@@ -20,11 +20,6 @@ class DiGraph(GraphInterface):
         return counter
 
     def get_all_v(self) -> dict:
-        # dic_print = {}
-        # for n in self.node_map:
-        #     str = "{n_key}: |edges out| {n_out_edges} |edges in| {node_in_edges}".format(n_key=n, n_out_edges=len(self.all_out_edges_of_node(n)), node_in_edges=len(self.all_in_edges_of_node(n)))
-        #     dic_print[n] = str
-        # print(dic_print)
         return self.node_map
 
     def all_in_edges_of_node(self, id1: int) -> dict:
@@ -103,30 +98,4 @@ class DiGraph(GraphInterface):
             return True
 
     def __repr__(self):
-        return '|V|=%s , |E|=%s' % (self.v_size(), self.e_size())
-
-
-if __name__ == '__main__':
-    g = DiGraph()  # creates an empty directed graph
-    for n in range(4):
-        g.add_node(n)
-    g.add_edge(0, 1, 1)
-    g.add_edge(1, 0, 1.1)
-    g.add_edge(1, 2, 1.3)
-    g.add_edge(2, 3, 1.1)
-    g.add_edge(1, 3, 1.9)
-    g.remove_edge(1, 3)
-    g.add_edge(1, 3, 10)
-    # print(g)  # prints the __repr__ (func output)
-    # print(g.get_all_v())  # prints a dict with all the graph's vertices.
-    # print(g.all_in_edges_of_node(1))
-    # print(g.all_out_edges_of_node(1))
-    print(g.get_all_v())
-    llist = [0,1,2,3]
-    temp_list = []
-    for i in llist:
-        if i != 2:
-            temp_list.append(i)
-    permu = permutations(temp_list)
-
-
+        return 'Node map: %s \nEdge map: %s' % (self.node_map, self.edge_map)

@@ -1,15 +1,17 @@
 import heapq as hq
 import json
 import math
-from queue import Queue
+from itertools import permutations
 from random import uniform
 from typing import List
 import sys
 from matplotlib import pyplot as plt
+from numpy.compat import long
+from array import *
 from src.GraphAlgoInterface import GraphAlgoInterface
 from src.GraphInterface import GraphInterface
 from src.DiGraph import *
-from itertools import permutations
+from collections import deque
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -73,15 +75,46 @@ class GraphAlgo(GraphAlgoInterface):
 
         return self.dijkstraAlgo(id1, id2)
 
+    def isConnected(self) -> bool:
+        Nlist = []
+        nodeMap = {}
+        nodes = 0
+        for n in self.graph.node_map.values():
+            temp = Gnode(n.key, n.location)
+            nodeMap[n.key] = temp
+            Nlist.append(temp)
+            nodes += 1
+        visited = [False for i in range(nodes)]
+        for i in range(nodes):
+            GraphAlgo.DFS(self.graph, i, visited, Nlist, nodeMap)
+            for bool in visited:
+                if not bool:
+                    return False
+        return True
+
+    @staticmethod
+    def DFS(graph: DiGraph, node_id: int, vistied: List[bool], Nlist: List[Gnode], nodeMap: dict):
+        stack = deque()
+        stack.append(Nlist[node_id])
+        while len(stack) > 0:
+            node_id = Nlist.index(stack[-1])
+            stack.pop()
+
+            if not vistied[node_id]:
+                vistied[node_id] = True
+            for e in graph.all_out_edges_of_node(Nlist[node_id].key):
+                if not vistied[e]:
+                    stack.append(Nlist[e])
+
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         best_weight = sys.maxsize
         for starting_n in node_lst:
             if self.tsp_helper(starting_n, node_lst)[1] < best_weight:
                 best_weight = self.tsp_helper(starting_n, node_lst)[1]
-                ans = self.tsp_helper(starting_n, node_lst)
+                best_path, weight = self.tsp_helper(starting_n, node_lst)
         if best_weight == sys.maxsize:
-            return [[], -1]
-        return ans
+            return [], float('inf')
+        return best_path, weight
 
     def tsp_helper(self, starting_n, node_list):
         best_path = []
@@ -119,26 +152,29 @@ class GraphAlgo(GraphAlgoInterface):
         return best_path, min_weight
 
     def centerPoint(self) -> (int, float):
-        min_distance = math.inf
-        node_id = 0
-        curr_max = 0
-        for Node1 in self.get_graph().get_all_v().values():
-            for Node2 in self.get_graph().get_all_v().values():
-                distance = self.shortest_path(Node1.key, Node2.key)[0]
-                if distance > curr_max:
-                    curr_max = distance
-            if curr_max < min_distance:
-                min_distance = curr_max
-                node_id = Node1.key
+        if self.isConnected():
+            min_distance = math.inf
+            node_id = 0
             curr_max = 0
-        ans = (node_id, min_distance)
-        return ans
+            for Node1 in self.get_graph().get_all_v().values():
+                for Node2 in self.get_graph().get_all_v().values():
+                    distance = self.shortest_path(Node1.key, Node2.key)[0]
+                    if distance > curr_max:
+                        curr_max = distance
+                if curr_max < min_distance:
+                    min_distance = curr_max
+                    node_id = Node1.key
+                curr_max = 0
+            ans = (node_id, min_distance)
+            return ans
+        else:
+            return -1, float('inf')
 
     def plot_graph(self) -> None:
         for node in self.get_graph().get_all_v().values():
             x, y, z = node.location
-            plt.plot(x, y, markersize=30, marker='.', color='red')
-            plt.text(x, y, str(node.key), color='black', fontsize=10)
+            plt.plot(x, y, markersize=25, marker='.', color='#14D5F0')
+            plt.text(x, y, str(node.key), color='#7D2F9F', fontsize=12)
             for dest_id, w in self.graph.all_out_edges_of_node(node.key).items():
                 dest = self.graph.node_map.get(dest_id)
                 x2, y2, z2 = dest.location
@@ -195,28 +231,3 @@ class GraphAlgo(GraphAlgoInterface):
         if path:
             path.insert(0, curr_node)
         return dist[dest] / 1.0, path
-
-
-if __name__ == "__main__":
-    a = Gnode(0, None)
-    b = Gnode(1, None)
-    c = Gnode(2, None)
-    d = Gnode(3, None)
-    e = Gnode(4, None)
-    graph = DiGraph()
-    algo = GraphAlgo(graph)
-    algo.get_graph().add_node(a.key, a.location)
-    algo.get_graph().add_node(b.key, b.location)
-    algo.get_graph().add_node(c.key, c.location)
-    algo.get_graph().add_node(d.key, d.location)
-    algo.get_graph().add_edge(0, 1, 8.0)
-    algo.get_graph().add_edge(0, 2, 1.0)
-    algo.get_graph().add_edge(0, 3, 3.0)
-    algo.get_graph().add_edge(2, 3, 1.0)
-    algo.get_graph().add_edge(3, 0, 1.0)
-    algo.get_graph().add_edge(3, 1, 1.0)
-    algo.get_graph().add_edge(3, 2, 4.0)
-    ll = [0, 3]
-    print(algo.TSP(ll))
-    # print(algo.shortest_path(0, 2))
-    index = 0
