@@ -1,13 +1,17 @@
 import heapq as hq
 import json
 import math
+from itertools import permutations
 from random import uniform
 from typing import List
 import sys
 from matplotlib import pyplot as plt
+from numpy.compat import long
+from array import *
 from src.GraphAlgoInterface import GraphAlgoInterface
 from src.GraphInterface import GraphInterface
 from src.DiGraph import *
+from collections import deque
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -71,57 +75,106 @@ class GraphAlgo(GraphAlgoInterface):
 
         return self.dijkstraAlgo(id1, id2)
 
+    def isConnected(self) -> bool:
+        Nlist = []
+        nodeMap = {}
+        nodes = 0
+        for n in self.graph.node_map.values():
+            temp = Gnode(n.key, n.location)
+            nodeMap[n.key] = temp
+            Nlist.append(temp)
+            nodes += 1
+        visited = [False for i in range(nodes)]
+        for i in range(nodes):
+            GraphAlgo.DFS(self.graph, i, visited, Nlist, nodeMap)
+            for bool in visited:
+                if not bool:
+                    return False
+        return True
+
+    @staticmethod
+    def DFS(graph: DiGraph, node_id: int, vistied: List[bool], Nlist: List[Gnode], nodeMap: dict):
+        stack = deque()
+        stack.append(Nlist[node_id])
+        while len(stack) > 0:
+            node_id = Nlist.index(stack[-1])
+            stack.pop()
+
+            if not vistied[node_id]:
+                vistied[node_id] = True
+            for e in graph.all_out_edges_of_node(Nlist[node_id].key):
+                if not vistied[e]:
+                    stack.append(Nlist[e])
+
     def TSP(self, node_lst: List[int]) -> (List[int], float):
-        temp = []  # temp node list
-        if len(node_lst) == 0:  # check if the node's list is empty
-            return None
-        currNode = node_lst[0]
-        temp.append(currNode)
-        visitedNodes = []
-        while len(node_lst) != 0:  # while there are still unvisited cities
-            visitedNodes.append(currNode)  # add the current node to visitedNode list
-            min_distance = sys.maxsize
-            node_lst.remove(currNode)
-            path = []  # init ans list of nodes
-            for node in node_lst:  # go all over the unvisited nodes, calculate the closest one
-                if node not in visitedNodes:
-                    curr_distance = self.shortest_path(currNode, node)[0]
-                    if curr_distance < min_distance:
-                        min_distance = curr_distance
-                        path = self.shortest_path(currNode, node)[1]  # add the closest node to path list
-            for node in path:  # The closest node's path (out of all cities) is appended to the list which is to be returned
-                if node is not path[0]:
-                    temp.append(node)
-                    visitedNodes.append(node)
-                    node_lst.remove(node)
-        if len(temp) == 0:
-            return None
-        distance = 0
-        for i in range(len(temp)-1):
-            distance += self.shortest_path(temp[i].key, temp[i+1].key)
-        return temp, distance
+        best_weight = sys.maxsize
+        for starting_n in node_lst:
+            if self.tsp_helper(starting_n, node_lst)[1] < best_weight:
+                best_weight = self.tsp_helper(starting_n, node_lst)[1]
+                best_path, weight = self.tsp_helper(starting_n, node_lst)
+        if best_weight == sys.maxsize:
+            return [], float('inf')
+        return best_path, weight
+
+    def tsp_helper(self, starting_n, node_list):
+        best_path = []
+        path = []
+        temp_list = []
+        for i in node_list:
+            if i != starting_n:
+                temp_list.append(i)
+
+        min_weight = sys.maxsize
+        # create permutations of all the nodes
+        permu = permutations(temp_list)
+
+        for curr_permu in permu:
+            path.clear()
+            relevant = True
+            curr_weight = 0
+            k = starting_n
+            path.append(k)
+            # loop through the permutation
+            for j in curr_permu:
+                weight = self.dijkstraAlgo(k, j)[0]
+                for n in range(len(self.dijkstraAlgo(k, j)[1])):
+                    if n != 0:
+                        path.append(self.dijkstraAlgo(k, j)[1][n])
+                if weight == float('inf'):  # weight does not exist
+                    relevant = False
+                    break
+                curr_weight += weight
+                k = j
+            if relevant:  # relevant remains true, so all edges exist
+                if min_weight > curr_weight:
+                    min_weight = curr_weight
+                    best_path = path
+        return best_path, min_weight
 
     def centerPoint(self) -> (int, float):
-        min_distance = math.inf
-        node_id = 0
-        curr_max = 0
-        for Node1 in self.get_graph().get_all_v().values():
-            for Node2 in self.get_graph().get_all_v().values():
-                distance = self.shortest_path(Node1.key, Node2.key)[0]
-                if distance > curr_max:
-                    curr_max = distance
-            if curr_max < min_distance:
-                min_distance = curr_max
-                node_id = Node1.key
+        if self.isConnected():
+            min_distance = math.inf
+            node_id = 0
             curr_max = 0
-        ans = (node_id, min_distance)
-        return ans
+            for Node1 in self.get_graph().get_all_v().values():
+                for Node2 in self.get_graph().get_all_v().values():
+                    distance = self.shortest_path(Node1.key, Node2.key)[0]
+                    if distance > curr_max:
+                        curr_max = distance
+                if curr_max < min_distance:
+                    min_distance = curr_max
+                    node_id = Node1.key
+                curr_max = 0
+            ans = (node_id, min_distance)
+            return ans
+        else:
+            return -1, float('inf')
 
     def plot_graph(self) -> None:
         for node in self.get_graph().get_all_v().values():
             x, y, z = node.location
-            plt.plot(x, y, markersize=30, marker='.', color='red')
-            plt.text(x, y, str(node.key), color='black', fontsize=10)
+            plt.plot(x, y, markersize=25, marker='.', color='#14D5F0')
+            plt.text(x, y, str(node.key), color='#7D2F9F', fontsize=12)
             for dest_id, w in self.graph.all_out_edges_of_node(node.key).items():
                 dest = self.graph.node_map.get(dest_id)
                 x2, y2, z2 = dest.location
@@ -131,8 +184,8 @@ class GraphAlgo(GraphAlgoInterface):
                 # plt.text(mid_x, mid_y, str(w)[0:4], color='black', fontsize=10)
         plt.show()
 
-
     """This is the Dijkstra's Algorithm implementation."""
+
     def dijkstraAlgo(self, src: int, dest: int) -> (float, list):
         # initializing the dist.
         # dist[src] is going to be zero and the rest inf.
