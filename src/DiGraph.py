@@ -20,6 +20,9 @@ class DiGraph(GraphInterface):
         return counter
 
     def get_all_v(self) -> dict:
+        for node in self.node_map.values():
+            node.edges_in = len(self.all_in_edges_of_node(node.key))
+            node.edges_out = len(self.all_out_edges_of_node(node.key))
         return self.node_map
 
     def all_in_edges_of_node(self, id1: int) -> dict:
@@ -96,6 +99,10 @@ class DiGraph(GraphInterface):
             self.edge_map.get(node_id1).pop(node_id2)
             self.mc += 1
             return True
+
+
+
+
 
     def __repr__(self):
         return '|V|=%s , |E|=%s' % (self.v_size(), self.e_size())
