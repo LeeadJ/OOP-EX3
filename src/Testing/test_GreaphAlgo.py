@@ -151,8 +151,8 @@ class TestGraphAlgo(TestCase):
         graphs = (g1, g2, g3)
         count = 1
         for g in graphs:
-            print("\t\t Graph : G%s"% count)
-            count+=1
+            print("\t\t Graph : G%s" % count)
+            count += 1
             graph = DiGraph()
             algo = GraphAlgo(graph)
             algo.load_from_json(g)
@@ -161,7 +161,7 @@ class TestGraphAlgo(TestCase):
             algo.centerPoint()
             finish_time = time.time()
             center_time = finish_time - start_time
-            print("Center: ",algo.centerPoint())
+            print("Center: ", algo.centerPoint())
             print("\nCenter Time: ", center_time)
 
             start_time = time.time()
@@ -182,3 +182,43 @@ class TestGraphAlgo(TestCase):
             finish_time = time.time()
             isConnected_time = finish_time - start_time
             print("\nisConnected Time: ", isConnected_time)
+
+    def test_isConnected(self):
+        g1 = r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\G1.json"
+        g2 = r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\G2.json"
+        g3 = r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\G3.json"
+        g4 = r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\1000Nodes.json"
+        g5 = r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\10000Nodes.json"
+
+        graph = DiGraph()
+        algo = GraphAlgo(graph)
+        algo.load_from_json(g1)
+        self.assertTrue(algo.isConnected())
+        algo.load_from_json(g2)
+        self.assertTrue(algo.isConnected())
+        algo.load_from_json(g3)
+        self.assertTrue(algo.isConnected())
+        algo.load_from_json(g4)
+        self.assertTrue(algo.isConnected())
+        algo.load_from_json(g5)
+        self.assertTrue(algo.isConnected())
+
+    def test_plotGraph(self):
+        g1 = r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\G1.json"
+        g2 = r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\G2.json"
+        g3 = r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\G3.json"
+        g4 = r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\1000Nodes.json"
+        g5 = r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\10000Nodes.json"
+        graph = DiGraph()
+        algo = GraphAlgo(graph)
+        algo.plot_graph()
+        # algo.load_from_json(g1)
+        # algo.plot_graph()
+        # algo.load_from_json(g2)
+        # algo.plot_graph()
+        # algo.load_from_json(g3)
+        # algo.plot_graph()
+        # algo.load_from_json(g4)
+        # algo.plot_graph()
+        # algo.load_from_json(g5)
+        # algo.plot_graph()
