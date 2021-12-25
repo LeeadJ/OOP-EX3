@@ -67,16 +67,14 @@ This is Graph 1 for example:
 - **Get graph** - return the graph that is in the GraphAlgo
 
 ## Three graphs: 
-  ** G1 as seen above **
-  
+  **G1 as seen above**
   ![g1](https://user-images.githubusercontent.com/68643157/147391546-43249bb4-3304-42ef-b563-391a5d45c687.png)
   
-  ** G2 **
-  
+  **G2**
   ![G2_python](https://user-images.githubusercontent.com/68643157/147391664-5f0d00fd-3425-40c1-af24-84f00d46c4da.png)
 
   
-  ** G3 **
+  **G3 *
   ![G3_python](https://user-images.githubusercontent.com/68643157/147391692-46320e0a-3682-462d-b411-39ab0064402d.png)
       
 
