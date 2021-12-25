@@ -30,7 +30,8 @@ The second is a nested dict, which is represented by node id and all the edges o
                 - Travelling salesman problem for a group of vertacies in the graph
                 - Plot the graph 
   <br />
-## Plot<br /><br />
+## Plot
+<br />
 
 This is the plot User Interface, which will show the graph that we have created <br />
 This is Graph 1 for example: 
