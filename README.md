@@ -74,7 +74,7 @@ This is Graph 1 for example:
   ![G2_python](https://user-images.githubusercontent.com/68643157/147391664-5f0d00fd-3425-40c1-af24-84f00d46c4da.png)
 
   
-  **G3 *
+  **G3**
   ![G3_python](https://user-images.githubusercontent.com/68643157/147391692-46320e0a-3682-462d-b411-39ab0064402d.png)
       
 
