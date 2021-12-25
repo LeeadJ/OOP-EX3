@@ -81,8 +81,7 @@ This is Graph 1 for example:
       
 
 ## Algorithms Results<br />
-  
- ![results](https://user-images.githubusercontent.com/68643157/145788456-ddfad22f-eace-4386-88bb-50fac57baab8.png)
+![results_python](https://user-images.githubusercontent.com/68643157/147392292-22c03f6c-ed20-4f3f-ae5f-b6abfa1c73a8.jpeg)
 <br />
 
 ## Running the programme <br />
