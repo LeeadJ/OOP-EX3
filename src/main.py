@@ -102,7 +102,7 @@ def check3():
     g_algo = GraphAlgo(g)
     print(g_algo.centerPoint())
     print(g_algo.TSP([1, 2, 4]))
-    g_algo.plot_graph()
+    # g_algo.plot_graph()
 
 
 def for_checker():
