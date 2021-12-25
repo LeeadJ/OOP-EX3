@@ -105,5 +105,18 @@ def check3():
     # g_algo.plot_graph()
 
 
+def for_checker():
+    """ This function is to be used by the person checking the assignment PLEASE follow the instructions
+    left by our remarks """
+    algo = GraphAlgo()  # this will initialise an empty graph algo
+    file = "PLEASE ENTER THE FILE PATH OF ANY DESIRED JSON FILES"
+    algo.load_from_json(file)  # this will load your file onto the algo and make a graph out of it
+    # now you have an algo graph you can use the algorithms
+    # algo.shortest_path() # this is to find the shortest path between two nodes
+    # algo.TSP() # you have to enter a list of nodes to find the tsp for it
+    # algo.centerPoint() # this will return the center point in the graph
+    # algo.plot_graph() # this will plot the graph for you
+
+
 if __name__ == '__main__':
     check()
