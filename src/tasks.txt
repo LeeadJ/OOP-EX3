@@ -1,9 +1,3 @@
 Tasks to get the assignment done:
-1. Change repr of graph (Leead)
-2. Change return of get_all_v (Leead)
-3. Is connected (Arieh)
-4. TSP (Arieh)
-5. Tests for graphAlgo (Leead)
 6. get times for running the algorithm and run them on big graphs (Leead)
-7. README (Arieh)
 8. Wiki (Arieh)
