@@ -3,10 +3,13 @@ from src.DiGraph import DiGraph
 from src.Gnode import Gnode
 from src.GraphAlgo import GraphAlgo
 import time
+import datetime
 
+"""This is the test class for the Graphalgo class."""
 
 class TestGraphAlgo(TestCase):
 
+    """This test checks if the get-graph function works."""
     def test_get_graph(self):
         a = Gnode(0, None)
         b = Gnode(1, None)
@@ -22,6 +25,7 @@ class TestGraphAlgo(TestCase):
         algo.get_graph().add_edge(0, 1, 3.0)
         self.assertEqual(graph, algo.get_graph())
 
+    """This test checks if a graph was loaded properly to the algorithm."""
     def test_load_from_json(self):
         graph_test = DiGraph()
         algo = GraphAlgo(graph_test)
@@ -34,6 +38,7 @@ class TestGraphAlgo(TestCase):
         str = '|V|=48 , |E|=166'
         self.assertTrue(algo.get_graph().str() == str)
 
+    """This test checks if a graph was saved properly."""
     def test_save_to_json(self):
         a = Gnode(0, None)
         b = Gnode(1, None)
@@ -49,6 +54,7 @@ class TestGraphAlgo(TestCase):
         algo.get_graph().add_edge(0, 1, 3.0)
         self.assertTrue(algo.save_to_json("Save-Test_Graph"))
 
+    """This test checks if the shortest path returned is correct."""
     def test_shortest_path(self):
         a = Gnode(0, None)
         b = Gnode(1, None)
@@ -73,6 +79,7 @@ class TestGraphAlgo(TestCase):
         self.assertEqual(ans, algo.shortest_path(3, 2))
         print(algo.shortest_path(3, 2))
 
+    """This test checks if the center point returned is correct."""
     def test_center_point(self):
         graph_test = DiGraph()
         algo = GraphAlgo(graph_test)
@@ -95,12 +102,14 @@ class TestGraphAlgo(TestCase):
         A5 = (40, 9.291743173960954)
         self.assertEqual(A5, algo.centerPoint())
 
+    """This test checks if a graph eas properly plotted."""
     def test_plot_graph(self):
         graph_test = DiGraph()
         algo = GraphAlgo(graph_test)
         algo.load_from_json("C:/Users/arieh/PycharmProjects/OOP-EX3/src/data/A5.json")
         algo.plot_graph()
 
+    """This test checks if the tsp function works properly."""
     def test_tsp(self):
         g = DiGraph()  # creates an empty directed graph
         for n in range(5):
@@ -116,6 +125,7 @@ class TestGraphAlgo(TestCase):
         g_algo = GraphAlgo(g)
         print(g_algo.TSP([1, 2, 4]))
 
+    """This test checks if the dijkstras algorithm works properly."""
     def test_dijkstraAlgo(self):
         a = Gnode(0, None)
         b = Gnode(1, None)
@@ -144,6 +154,7 @@ class TestGraphAlgo(TestCase):
         best.update(algo.dijkstraAlgo(0, 3)[1])
         print(best)
 
+    """This test checks the runtime of the wanted algorithms."""
     def test_runtimer(self):
         g1 = r"C:\Users\Leead\PycharmProjects\OOP-EX3\src\data\G1.json"
         g2 = r"C:\Users\Leead\PycharmProjects\OOP-EX3\src\data\G2.json"
@@ -157,28 +168,34 @@ class TestGraphAlgo(TestCase):
             algo = GraphAlgo(graph)
             algo.load_from_json(g)
 
-            start_time = time.time()
+            start_time = datetime.datetime.now()
             algo.centerPoint()
-            finish_time = time.time()
-            center_time = finish_time - start_time
+            end_time = datetime.datetime.now()
+            time_diff = (end_time - start_time)
+            execution_time = time_diff.total_seconds() * 1000
             print("Center: ",algo.centerPoint())
-            print("\nCenter Time: ", center_time)
+            print("\nCenter Time: ", execution_time)
 
-            start_time = time.time()
+
+            start_time = datetime.datetime.now()
             algo.shortest_path(1, 2)
-            finish_time = time.time()
-            sp_time = finish_time - start_time
-            print("\nShortest Path Time: ", sp_time)
+            end_time = datetime.datetime.now()
+            time_diff = (end_time - start_time)
+            execution_time = time_diff.total_seconds() * 100000
+            print("\nShortest Path Time: ", execution_time)
 
             ll = [1, 2]
-            start_time = time.time()
+            start_time = datetime.datetime.now()
             algo.TSP(ll)
-            finish_time = time.time()
-            tsp_time = finish_time - start_time
-            print("\nTSP Time: ", tsp_time)
+            end_time = datetime.datetime.now()
+            time_diff = (end_time - start_time)
+            execution_time = time_diff.total_seconds() * 1000
+            print("\nTSP Time: ", execution_time)
 
-            start_time = time.time()
+            start_time = datetime.datetime.now()
             algo.isConnected()
-            finish_time = time.time()
-            isConnected_time = finish_time - start_time
-            print("\nisConnected Time: ", isConnected_time)
+            end_time = datetime.datetime.now()
+            time_diff = (end_time - start_time)
+            execution_time = time_diff.total_seconds() * 1000
+            print("\nisConnected Time: ", execution_time)
+

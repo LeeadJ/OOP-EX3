@@ -13,14 +13,21 @@ from src.GraphInterface import GraphInterface
 from src.DiGraph import *
 from collections import deque
 
+"""This class represents algorithms of a graph."""
+
 
 class GraphAlgo(GraphAlgoInterface):
+    """Constructor"""
 
     def __init__(self, graph: DiGraph = DiGraph()):
         self.graph = graph
 
+    """This function return the graph on which the algorithm works on."""
+
     def get_graph(self) -> GraphInterface:
         return self.graph
+
+    """This function loads a graph from a json file."""
 
     def load_from_json(self, file_name: str) -> bool:
         try:
@@ -41,6 +48,8 @@ class GraphAlgo(GraphAlgoInterface):
             raise NotImplementedError
         finally:
             json_file.close()
+
+    """This function saves the graph in JSON format to a file."""
 
     def save_to_json(self, file_name: str) -> bool:
         try:
@@ -65,8 +74,11 @@ class GraphAlgo(GraphAlgoInterface):
         finally:
             write_file.close()
 
+    """This function returns the shortest path from node id1 to node id2 using Dijkstra's Algorithm."""
+
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         keys = self.graph.get_all_v().keys()
+        # check if the nodes exist in the graph.
         if id1 not in keys or id2 not in keys:
             return float('inf'), []
 
@@ -74,6 +86,8 @@ class GraphAlgo(GraphAlgoInterface):
             return 0, []
 
         return self.dijkstraAlgo(id1, id2)
+
+    """This function returns True if the graph is a connected graph."""
 
     def isConnected(self) -> bool:
         Nlist = []
@@ -92,6 +106,8 @@ class GraphAlgo(GraphAlgoInterface):
                     return False
         return True
 
+    """This function searches a list of nodes using the Depth-first search method."""
+
     @staticmethod
     def DFS(graph: DiGraph, node_id: int, vistied: List[bool], Nlist: List[Gnode], nodeMap: dict):
         stack = deque()
@@ -106,8 +122,11 @@ class GraphAlgo(GraphAlgoInterface):
                 if not vistied[e]:
                     stack.append(Nlist[e])
 
+    """This function finds the shortest path that visits all the nodes in the list."""
+
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         best_weight = sys.maxsize
+        # loop through all the nodes in the list and check each one as the starting point.
         for starting_n in node_lst:
             if self.tsp_helper(starting_n, node_lst)[1] < best_weight:
                 best_weight = self.tsp_helper(starting_n, node_lst)[1]
@@ -116,10 +135,13 @@ class GraphAlgo(GraphAlgoInterface):
             return [], float('inf')
         return best_path, weight
 
+    """This function is a helper function to the TSP function."""
+
     def tsp_helper(self, starting_n, node_list):
         best_path = []
         path = []
         temp_list = []
+        # create a list of the nodes without the starting one.
         for i in node_list:
             if i != starting_n:
                 temp_list.append(i)
@@ -128,8 +150,9 @@ class GraphAlgo(GraphAlgoInterface):
         # create permutations of all the nodes
         permu = permutations(temp_list)
 
+        # loop through all the permutations.
         for curr_permu in permu:
-            path.clear()
+            path.clear()  # reset the path for each iteration.
             relevant = True
             curr_weight = 0
             k = starting_n
@@ -137,6 +160,7 @@ class GraphAlgo(GraphAlgoInterface):
             # loop through the permutation
             for j in curr_permu:
                 weight = self.dijkstraAlgo(k, j)[0]
+                # loop through the nodes in the list and find the shortest path using dijkstras.
                 for n in range(len(self.dijkstraAlgo(k, j)[1])):
                     if n != 0:
                         path.append(self.dijkstraAlgo(k, j)[1][n])
@@ -151,7 +175,10 @@ class GraphAlgo(GraphAlgoInterface):
                     best_path = path
         return best_path, min_weight
 
+    """This function finds the node that has the shortest distance to it's farthest node."""
+
     def centerPoint(self) -> (int, float):
+        # continue only if the graph is connected.
         if self.isConnected():
             min_distance = math.inf
             node_id = 0
@@ -170,6 +197,8 @@ class GraphAlgo(GraphAlgoInterface):
         else:
             return -1, float('inf')
 
+    """This function plots the graph."""
+
     def plot_graph(self) -> None:
         for node in self.get_graph().get_all_v().values():
             x, y, z = node.location
@@ -184,7 +213,7 @@ class GraphAlgo(GraphAlgoInterface):
                 # plt.text(mid_x, mid_y, str(w)[0:4], color='black', fontsize=10)
         plt.show()
 
-    """This is the Dijkstra's Algorithm implementation."""
+    """This is the Dijkstra's Algorithm implementation It finds the shortest path between two given nodes.."""
 
     def dijkstraAlgo(self, src: int, dest: int) -> (float, list):
         # initializing the dist.
@@ -231,3 +260,6 @@ class GraphAlgo(GraphAlgoInterface):
         if path:
             path.insert(0, curr_node)
         return dist[dest] / 1.0, path
+
+
+

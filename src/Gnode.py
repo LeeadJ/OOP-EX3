@@ -1,7 +1,14 @@
 import random
+"""This class represents a Node.
+    - Edges In.
+    - Edges Out.
+    - Key (ID).
+    - location."""
 
 
 class Gnode:
+
+    """Constructor"""
     def __init__(self, key, location: tuple = None,):
         self.edges_in = 0
         self.edges_out = 0

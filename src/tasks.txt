@@ -7,3 +7,8 @@ Tasks to get the assignment done:
 6. get times for running the algorithm and run them on big graphs (Leead)
 7. README (Arieh)
 8. Wiki (Arieh)
+
+shorest path
+center
+isconnected
+tsp
