@@ -29,7 +29,7 @@ The second is a nested dict, which is represented by node id and all the edges o
                 - The ideal center of the graph.
                 - Travelling salesman problem for a group of vertacies in the graph
                 - Plot the graph 
-  <br />
+  
 ## Plot
 <br />
 
@@ -53,12 +53,13 @@ This is Graph 1 for example:
   Given a list of Nodes, find the shortest way to visit all Nodes at least once. 
   In the tsp we first initialized a matrix. 
   Each index in the matrix represented the weight between two nodes.
-  We than ran the 'floyd warshall' algorithem, minimizing each index to the shortrst path between the two nodes.
+  We than ran the 'Dijkstra' algorithem, minimizing each index to the shortrst path between the two nodes.
   We then initialized a boolean array, where each index represents a node key from the givin graph.
   The index in the boolean array is true if the node was visited and false if not.
   Since the rout is cyclic there is no importance to the starting point.
   We used the tsp_helper function. It recursivly computes the tsp for each node.
   The helper returns the lowest path by weight.
+  
 - **Load from json** - Given a path of a json file, load it to a GraphAlgo
 
 - **Save to json** - Given a graph that we want to save, it will save it in a json format. 
