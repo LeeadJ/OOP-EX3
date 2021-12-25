@@ -28,11 +28,11 @@ class TestGraphAlgo(TestCase):
         algo.load_from_json(r"C:\Users\Leead\PycharmProjects\OOP-EX3\src\data\A0.json")
         self.assertTrue(algo.load_from_json)
         str = '|V|=11 , |E|=22'
-        self.assertTrue(algo.get_graph()._str_() == str)
+        self.assertTrue(algo.get_graph().str() == str)
         algo.load_from_json(r"C:\Users\Leead\PycharmProjects\OOP-EX3\src\data\A5.json")
         self.assertTrue(algo.load_from_json)
         str = '|V|=48 , |E|=166'
-        self.assertTrue(algo.get_graph()._str_() == str)
+        self.assertTrue(algo.get_graph().str() == str)
 
     def test_save_to_json(self):
         a = Gnode(0, None)
