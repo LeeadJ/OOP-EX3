@@ -2,9 +2,12 @@
 <br /> 
 
 ![open_pic](https://user-images.githubusercontent.com/68643157/147391303-35a6433e-de51-49cc-abb9-091a5af02333.jpg)
+
+**Done by Arieh Norton and Leead Jacobowitz** 
   <br />
   
   ### In this assingment, we were challenged to create a directed weighted graph OOP and to visulise it as a plot using python. 
+  
   
 
 ## The main idea of the code <br />
