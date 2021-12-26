@@ -16,6 +16,10 @@ The next stage of our code is to implement the two interfaces we have, GraphInte
 Digraph implements GraphInterface and GraphAlgo implements GraphAlgoInterface. In Digraph we used two dicts, the first is a dict of node. 
 The second is a nested dict, which is represented by node id and all the edges of that node. 
 
+## Our code structure <br />
+![UML-Ex3](https://user-images.githubusercontent.com/68643157/147404015-a4f46d17-4a1b-4b51-9c4b-1971582e79a4.jpeg)
+
+
 
 ## classes <br />
 1. **Gnode** - This class is our Node object, to create one it needs to get key and location, if it doesn't get location
