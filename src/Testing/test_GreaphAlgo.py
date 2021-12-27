@@ -148,14 +148,26 @@ class TestGraphAlgo(TestCase):
         g1 = r"C:\Users\Leead\PycharmProjects\OOP-EX3\src\data\G1.json"
         g2 = r"C:\Users\Leead\PycharmProjects\OOP-EX3\src\data\G2.json"
         g3 = r"C:\Users\Leead\PycharmProjects\OOP-EX3\src\data\G3.json"
-        graphs = (g1, g2, g3)
+        bag = r"C:\Users\Leead\PycharmProjects\OOP-EX3\src\data\1000Nodes.json"
+        tbag = r"C:\Users\Leead\PycharmProjects\OOP-EX3\src\data\10000Nodes.json"
+        graphs = (g1, g2, g3, bag, tbag)
         count = 1
         for g in graphs:
             print("\t\t Graph : G%s" % count)
-            count += 1
             graph = DiGraph()
             algo = GraphAlgo(graph)
+            start_time = time.time()
             algo.load_from_json(g)
+            finish_time = time.time()
+            center_time = finish_time - start_time
+            print("\nLoad Time: ", center_time)
+
+            start_time = time.time()
+            algo.save_to_json("Test_G%s" % count)
+            finish_time = time.time()
+            center_time = finish_time - start_time
+            print("\nLoad Time: ", center_time)
+            count += 1
 
             start_time = time.time()
             algo.centerPoint()
@@ -182,6 +194,9 @@ class TestGraphAlgo(TestCase):
             finish_time = time.time()
             isConnected_time = finish_time - start_time
             print("\nisConnected Time: ", isConnected_time)
+
+
+
 
     def test_isConnected(self):
         g1 = r"C:\Users\arieh\PycharmProjects\OOP-EX3\src\data\G1.json"
